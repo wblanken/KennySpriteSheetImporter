@@ -7,6 +7,7 @@ The program was created with Python 3.5 and Pillow 3.0
 
 ## Usage
 The current iteration is very simple and requires some manual steps to be performed in Unity before running.
+
 1. Import the sprite sheet into Unity
 2. Perform an automatic slice of the sprites
 3. Save changes
@@ -24,3 +25,8 @@ If you don't wish to use a virtual environment skip to step 5:
 3. Create the virtual environment: `virtualenv KennySpriteSheetEnv` and cd into the directory.
 4. Activate the virtual environment: `Scripts\activate.bat`
 5. Install this project: `pip install -e git+https://github.com/wblanken/KennySpriteSheetImporter.git#egg=KennySpriteSheetImporter`
+
+## Feature Plans
+1. GUI interface
+2. Automated import of assets without manual steps in Unity.
+3. An executable.
