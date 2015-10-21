@@ -27,6 +27,6 @@ If you don't wish to use a virtual environment skip to step 5:
 5. Install this project: `pip install -e git+https://github.com/wblanken/KennySpriteSheetImporter.git#egg=KennySpriteSheetImporter`
 
 ## Feature Plans
-1. GUI interface
-2. Automated import of assets without manual steps in Unity.
-3. An executable.
+* GUI interface
+* Automated import of assets without manual steps in Unity.
+* An executable.
