@@ -24,7 +24,7 @@ setup(
     install_requires=['Pillow==3.0.0'],
     entry_points={
         'console_scripts': [
-            'KennySpriteSlice=KennySpriteSlice:main'
+            'main=main:main'
         ]
     }
 )

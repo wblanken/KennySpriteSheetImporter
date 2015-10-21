@@ -103,12 +103,3 @@ def kenny_sprite_slicer():
 
     write_meta_file(sprites, name_prefix, output_file)
 
-
-def main():
-    try:
-        kenny_sprite_slicer()
-    except Error as e:
-        print(e.message)
-
-if __name__ == "__main__":
-    main()
