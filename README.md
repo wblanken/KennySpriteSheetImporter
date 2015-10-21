@@ -11,7 +11,7 @@ The current iteration is very simple and requires some manual steps to be perfor
 1. Import the sprite sheet into Unity
 2. Perform an automatic slice of the sprites
 3. Save changes
-4. Run this application: `python KennySpriteSlice.py`
+4. Run this application: `python main.py` or if installed as bellow: `Scripts\main.exe`
 
 *Note: if using a virtualenv, activate the environment before running.*
 
@@ -25,6 +25,7 @@ If you don't wish to use a virtual environment skip to step 5:
 3. Create the virtual environment: `virtualenv KennySpriteSheetEnv` and cd into the directory.
 4. Activate the virtual environment: `Scripts\activate.bat`
 5. Install this project: `pip install -e git+https://github.com/wblanken/KennySpriteSheetImporter.git#egg=KennySpriteSheetImporter`
+6. Run the project from the Scripts folder: `main.exe`
 
 ## Feature Plans
 * GUI interface
