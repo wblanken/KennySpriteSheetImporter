@@ -2,7 +2,7 @@
 # Setup.py
 # Copyright Will Blankenship 2015
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name='KennySpriteSheetImporter',
@@ -20,7 +20,7 @@ setup(
         'Programming Language :: Python :: 3.5'
     ],
     keywords='Unity Import Sprite',
-    packages='KennySpriteSlice',
+    packages=find_packages(),
     install_requires=['Pillow==3.0.0'],
     entry_points={
         'console_scripts': [
