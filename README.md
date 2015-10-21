@@ -30,4 +30,4 @@ If you don't wish to use a virtual environment skip to step 5:
 ## Feature Plans
 * GUI interface
 * Automated import of assets without manual steps in Unity.
-* An executable.
+* A standalone executable.
