@@ -7,6 +7,8 @@ The program was created with Python 3.5 and Pillow 3.0
 
 ## Usage
 
+Download and extract KennySpriteSlice.7z to get a .exe of the project.
+
 Run: `python main.py` or if installed as bellow: `Scripts\main.exe`
 
 *Note: if using a virtualenv, activate the environment before running the .py file*
@@ -25,4 +27,3 @@ If you don't wish to use a virtual environment skip to step 5:
 
 ## Feature Plans
 * GUI interface
-* A standalone executable.
