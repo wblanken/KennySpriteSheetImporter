@@ -48,7 +48,7 @@ def kenny_sprite_slicer():
     image_height = Image.open(sprite_sheet).size[1]
 
     if input('Is there a format file?\n1)Yes\n2)No\n') == '1':
-        format_file = input('Where is the format file (.txt or .xml): ')
+        format_file = input('Where is the format file (.txt or .xml): ').replace('"', '').strip()
         format_file_extension = os.path.splitext(format_file)[1]
         if not os.path.isfile(format_file):
             raise Error('Format file does not exist.')
@@ -71,4 +71,4 @@ def kenny_sprite_slicer():
     create_meta_file(os.path.join(destination, sprite_sheet_name + ".meta"), sprites)
 
     # Copy the sprite sheet over
-    shutil.copy2(sprite_sheet, os.path.join(destination, sprite_sheet_name))
+    shutil.copy(sprite_sheet, os.path.join(destination, sprite_sheet_name))
