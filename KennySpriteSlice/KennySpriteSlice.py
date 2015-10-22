@@ -4,102 +4,71 @@
 
 # This will attempt to correctly slice sprite sheets from the Kenny Donation Collection
 
-
 import xml.etree.ElementTree
 from PIL import Image
+import shutil
 import os
 
 from .Sprite import Sprite
 from .Error import Error
+from .SpriteMetaFileData import create_meta_file
 
 
-def parse_xml(format_file):
+# Parse a .xml file that includes the sprite map information
+def parse_xml(format_file, image_height):
     sprites = []
     for texture in xml.etree.ElementTree.parse(format_file).getroot().iter('SubTexture'):
-        sprites.append(Sprite(texture.attrib['name'].replace('.png', ''),
-                              texture.attrib['x'],
-                              texture.attrib['y'],
-                              texture.attrib['width'],
-                              texture.attrib['height']))
+        sprite = Sprite(texture.attrib['name'].replace('.png', ''),
+                        texture.attrib['x'],
+                        texture.attrib['y'],
+                        texture.attrib['width'],
+                        texture.attrib['height'])
+        sprite.reverse_y(image_height)
+        sprites.append(sprite)
     return sprites
 
 
-def parse_text(format_file):
+# Parse a .txt file that includes the sprite map information
+def parse_text(format_file, image_height):
     sprites = []
     with open(format_file) as ff:
         for line in ff:
             name, x, y, width, height = line.replace(' =', '').split(' ')
-            sprites.append(Sprite(name, x, y, width, height.replace('\n', '')))
+            sprite = Sprite(name, x, y, width, height.replace('\n', ''))
+            sprite.reverse_y(image_height)
+            sprites.append(sprite)
     return sprites
 
 
-def write_meta_file(sprites, name_prefix, output_file):
-    # Get image dimensions
-    image_height = Image.open(output_file.replace('.meta', '')).size[1]
-
-    # Create a backup of the meta file
-    os.rename(output_file, output_file + '.bak')
-
-    # Create the new file and make changes
-    recycle_names = False
-    in_sprite = False
-    sprite_counter = 0
-    with open(output_file + '.bak') as inf:
-        with open(output_file, 'w') as of:
-            for line in inf:
-                if line.strip() == 'fileIDToRecycleName:':
-                    recycle_names = True
-                elif recycle_names and line.strip().startswith('serializedVersion:'):
-                    recycle_names = False
-                    sprite_counter = 0
-                elif recycle_names:
-                    line = line.split(': ')[0] + ': ' + name_prefix + sprites[sprite_counter].name + '\n'
-                    sprite_counter += 1
-                elif line.strip().startswith('- name:'):
-                    in_sprite = True
-                    line = line.split(': ')[0] + ': ' + name_prefix + sprites[sprite_counter].name + '\n'
-                elif in_sprite and line.strip().startswith('x:'):
-                    line = line.split(': ')[0] + ': ' + sprites[sprite_counter].x + '\n'
-                elif in_sprite and line.strip().startswith('y:'):
-                    y_val = image_height - int(sprites[sprite_counter].y) - int(sprites[sprite_counter].height)
-                    line = line.split(': ')[0] + ': ' + str(y_val) + '\n'
-                elif in_sprite and line.strip().startswith('width:'):
-                    line = line.split(': ')[0] + ': ' + sprites[sprite_counter].width + '\n'
-                elif in_sprite and line.strip().startswith('height:'):
-                    line = line.split(': ')[0] + ': ' + sprites[sprite_counter].height + '\n'
-                    sprite_counter += 1
-                    in_sprite = False
-                of.write(line)
-
-    # Cleanup
-    os.remove(output_file + '.bak')
-
-
 def kenny_sprite_slicer():
-    format_file = input('Where is the format file (.txt or .xml): ').replace('"', '').strip()
-    output_file = input('Where is the output file (.meta): ').replace('"', '').strip()
+    sprites = []
 
-    format_file_extension = os.path.splitext(format_file)[1]
-    output_file_extension = os.path.splitext(output_file)[1]
+    sprite_sheet = input('Where is the sprite sheet: ').replace('"', '').strip()
+    # Get image height
+    image_height = Image.open(sprite_sheet).size[1]
 
-    if not os.path.isfile(output_file):
-        raise Error('Output file does not exist.')
-    elif not os.path.isfile(format_file):
-        raise Error('Format file does not exist')
-    elif output_file_extension != '.meta':
-        raise Error('Invalid output file type.')
+    if input('Is there a format file?\n1)Yes\n2)No\n') == '1':
+        format_file = input('Where is the format file (.txt or .xml): ')
+        format_file_extension = os.path.splitext(format_file)[1]
+        if not os.path.isfile(format_file):
+            raise Error('Format file does not exist.')
 
-    if format_file_extension == '.xml':
-        sprites = parse_xml(format_file)
-    elif format_file_extension == '.txt':
-        sprites = parse_text(format_file)
-    else:
-        raise Error('Wrong format file type')
+        if format_file_extension == '.xml':
+            sprites = parse_xml(format_file, image_height)
+        elif format_file_extension == '.txt':
+            sprites = parse_text(format_file, image_height)
+        else:
+            raise Error('Wrong format file type')
 
-    name_prefix = ''
-    if input('Would you like to add a prefix to the names?\n1)Yes\n2)No\n') == '1':
-        name_prefix = input('What is the prefix you want to use? ')
-        name_prefix += '_'
+    destination = input('Where is the destination: ').replace('"', '').strip()
 
-    write_meta_file(sprites, name_prefix, output_file)
+    sprite_sheet_name = os.path.split(sprite_sheet)[1]
 
+    if not os.path.isfile(sprite_sheet):
+        raise Error('Sprite sheet does not exist.')
+
+    # Create the meta file for the sprite sheet
+    create_meta_file(os.path.join(destination, sprite_sheet_name + ".meta"), sprites)
+
+    # Copy the sprite sheet over
+    shutil.copy2(sprite_sheet, os.path.join(destination, sprite_sheet_name))

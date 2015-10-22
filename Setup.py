@@ -6,7 +6,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='KennySpriteSheetImporter',
-    version='0.0.1',
+    version='0.0.2',
     description='An importer for sprite sheets.',
     long_description='A simple importer for sprite sheets in the Kenny donation collection into Unity',
     url='https://github.com/wblanken/KennySpriteSheetImporter',
